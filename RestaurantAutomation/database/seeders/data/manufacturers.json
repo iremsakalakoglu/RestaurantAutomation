@@ -1,0 +1,84 @@
+{
+    "manufacturers": [
+        {
+            "name": "Ülker",
+            "contact_person": "Müşteri Hizmetleri",
+            "phone": "444 1 544",
+            "email": "info@ulker.com.tr",
+            "address": "Kısıklı Mahallesi Ferah Caddesi No:1 B.Çamlıca Üsküdar İstanbul",
+            "is_active": true
+        },
+        {
+            "name": "Eti",
+            "contact_person": "Müşteri Hizmetleri",
+            "phone": "444 2 384",
+            "email": "info@eti.com.tr",
+            "address": "Organize Sanayi Bölgesi 11. Cadde ESKİŞEHİR",
+            "is_active": true
+        },
+        {
+            "name": "Coca-Cola",
+            "contact_person": "Müşteri İlişkileri",
+            "phone": "0800 261 1800",
+            "email": "info@coca-cola.com.tr",
+            "address": "Büyükdere Cad. No:121 34394 Esentepe İstanbul",
+            "is_active": true
+        },
+        {
+            "name": "Pepsi",
+            "contact_person": "Müşteri Hizmetleri",
+            "phone": "0800 261 4141",
+            "email": "info@pepsico.com.tr",
+            "address": "Tem Otoyolu Üzeri, No:2, 34776 Ümraniye/İstanbul",
+            "is_active": true
+        },
+        {
+            "name": "Sütaş",
+            "contact_person": "Müşteri İlişkileri",
+            "phone": "444 4 878",
+            "email": "info@sutas.com.tr",
+            "address": "Uluabat Köyü, Karacabey, Bursa",
+            "is_active": true
+        },
+        {
+            "name": "Pınar",
+            "contact_person": "Müşteri Hizmetleri",
+            "phone": "444 7 627",
+            "email": "info@pinar.com.tr",
+            "address": "Şehit Fethibey Caddesi No:120 Alsancak/İzmir",
+            "is_active": true
+        },
+        {
+            "name": "Torku",
+            "contact_person": "Müşteri Hizmetleri",
+            "phone": "444 0 968",
+            "email": "info@torku.com.tr",
+            "address": "Büyükkayacık OSB Mahallesi No:4 Selçuklu/Konya",
+            "is_active": true
+        },
+        {
+            "name": "Dimes",
+            "contact_person": "Müşteri İlişkileri",
+            "phone": "0800 261 0 261",
+            "email": "info@dimes.com.tr",
+            "address": "Esenboğa Yolu 22. km Akyurt/Ankara",
+            "is_active": true
+        },
+        {
+            "name": "Kent",
+            "contact_person": "Müşteri Hizmetleri",
+            "phone": "444 5 368",
+            "email": "info@kentgida.com.tr",
+            "address": "Gebze Organize Sanayi Bölgesi, Kocaeli",
+            "is_active": true
+        },
+        {
+            "name": "Yayla",
+            "contact_person": "Müşteri Hizmetleri",
+            "phone": "444 9 295",
+            "email": "info@yayla.com.tr",
+            "address": "Ankara Organize Sanayi Bölgesi",
+            "is_active": true
+        }
+    ]
+} 

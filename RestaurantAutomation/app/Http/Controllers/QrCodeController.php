@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use App\Models\Table;
+
+class QrCodeController extends Controller
+{
+    public function generateQr($tableId)
+    {
+        $table = Table::where('id', $tableId)->orWhere('table_number', $tableId)->firstOrFail();
+        $url = url('/menu?table=' . $table->id);
+        return response(QrCode::size(300)->generate($url))
+            ->header('Content-Type', 'image/svg+xml');
+    }
+}
