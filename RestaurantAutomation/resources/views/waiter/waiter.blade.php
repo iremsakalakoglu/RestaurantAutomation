@@ -41,13 +41,21 @@
                 <button onclick="toggleView('delivered')" class="text-gray-600 hover:text-[#d4a373] transition-colors px-3 py-1 rounded-md">
                     <i class="fas fa-check-circle mr-2"></i>Teslim Edilenler
                 </button>
-                <span class="text-gray-600">{{ Auth::user()->name }}</span>
-                <form action="{{ route('auth.logout') }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="text-[#d4a373] hover:text-[#c48c63] transition-colors">
-                        <i class="fas fa-sign-out-alt mr-2"></i>Çıkış Yap
+                <div class="relative group ml-4">
+                    <button class="flex items-center gap-2 text-gray-600 hover:text-[#d4a373] focus:outline-none">
+                        <span>Hoş geldiniz, {{ Auth::user()->name }}</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
                     </button>
-                </form>
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded shadow-lg border z-50 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
+                        <a href="{{ route('waiter.account.info') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Hesap Bilgilerim</a>
+                        <form action="{{ route('auth.logout') }}" method="POST" class="block">
+                            @csrf
+                            <button type="submit" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Çıkış Yap</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -133,16 +141,10 @@
                                     @else
                                         @if($table->status == 'dolu')
                                 <div class="mt-auto">
-                                                <form action="{{ route('waiter.table.clear', ['table' => $table->id]) }}" method="POST">
-                                        @csrf
-                                                    <button type="submit" 
-                                                        class="w-full bg-[#d4a373] hover:bg-[#c48c63] text-white px-3 py-2 rounded text-sm font-medium transition-colors flex items-center justify-center gap-2">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
-                                                        </svg>
-                                                        Masayı Boşalt
-                                        </button>
-                                    </form>
+                                    <button type="button" onclick="clearTable({{ $table->id }})" 
+                                        class="w-full bg-[#d4a373] hover:bg-[#c48c63] text-white px-3 py-2 rounded text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                                        <i class="fas fa-broom"></i> Masayı Boşalt
+                                    </button>
                                 </div>
                                 @elseif($table->status == 'boş')
                                 <div class="mt-auto">
@@ -408,7 +410,7 @@
                     <!-- Ana İçerik -->
                     <div class="flex-1 flex overflow-hidden">
                         <!-- Kategoriler -->
-                        <div class="w-1/4 border-r overflow-y-auto">
+                        <div class="w-1/4 border-r overflow-y-auto" style="max-height: calc(100vh - 400px);">
                             <div class="p-2">
                                 <button type="button" 
                                     class="category-btn w-full text-left px-4 py-2 rounded-md mb-1 hover:bg-gray-100 transition-colors"
@@ -426,7 +428,7 @@
                         </div>
 
                         <!-- Ürünler -->
-                        <div class="flex-1 overflow-y-auto p-4">
+                        <div class="flex-1 overflow-y-auto p-4" style="max-height: calc(100vh - 400px);">
                             <div id="productGrid" class="grid grid-cols-2 gap-4">
                                 @foreach(\App\Models\Product::with(['category', 'stock'])->orderBy('name')->get() as $product)
                                 <div class="product-item border rounded-lg p-3 cursor-pointer hover:border-[#d4a373] transition-colors"
@@ -489,15 +491,15 @@
     </div>
 
     <!-- Sipariş Oluşturma Modal -->
-    <div id="createOrderModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl mx-4 h-[80vh] flex flex-col">
+    <div id="createOrderModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl mx-auto my-8 flex flex-col" style="max-height: 90vh;">
             <div class="p-4 border-b flex justify-between items-center bg-[#f5e6d3]">
                 <h3 class="text-lg font-semibold text-[#d4a373]">Yeni Sipariş Oluştur</h3>
                 <button onclick="closeCreateOrderModal()" class="text-gray-400 hover:text-gray-500">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="createOrderForm" action="" method="POST" class="flex-1 flex flex-col h-full">
+            <form id="createOrderForm" action="" method="POST" class="flex-1 flex flex-col overflow-hidden">
                 @csrf
                 <input type="hidden" id="createOrderTableId" name="table_id">
                 <div class="flex-1 flex flex-col">
@@ -507,7 +509,7 @@
                         <input type="text" id="createOrderCustomerName" name="customer_name" class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-[#d4a373] focus:ring focus:ring-[#d4a373] focus:ring-opacity-50" placeholder="Müşteri Adı Soyadı" required>
                     </div>
                     <!-- Ana İçerik: Sol (ürün seçimi) ve Sağ (eklenen ürünler) sütunlar -->
-                    <div class="flex-1 flex overflow-hidden">
+                    <div class="flex-1 flex overflow-hidden min-h-0">
                         <!-- Sol Sütun: Ürün arama, kategori, ürünler -->
                         <div class="flex-1 flex flex-col border-r min-w-0">
                             <div class="p-4 border-b">
@@ -520,7 +522,7 @@
                             </div>
                             <div class="flex-1 flex overflow-hidden">
                                 <!-- Kategoriler -->
-                                <div class="w-1/4 border-r overflow-y-auto">
+                                <div class="w-1/4 border-r overflow-y-auto" style="max-height: calc(100vh - 400px);">
                                     <div class="p-2">
                                         <button type="button" class="create-order-category-btn w-full text-left px-4 py-2 rounded-md mb-1 hover:bg-gray-100 transition-colors" data-category="all">Tüm Ürünler</button>
                                         @foreach(\App\Models\Category::orderBy('name')->get() as $category)
@@ -529,7 +531,7 @@
                                     </div>
                                 </div>
                                 <!-- Ürünler -->
-                                <div class="flex-1 overflow-y-auto p-4">
+                                <div class="flex-1 overflow-y-auto p-4" style="max-height: calc(100vh - 400px);">
                                     <div id="createOrderProductGrid" class="grid grid-cols-2 gap-4">
                                         @foreach(\App\Models\Product::with(['category', 'stock'])->orderBy('name')->get() as $product)
                                         <div class="create-order-product-item border rounded-lg p-3 transition-colors @if($product->stock && $product->stock->quantity == 0) bg-red-50 border-red-200 opacity-70 cursor-not-allowed pointer-events-none @else cursor-pointer hover:border-[#d4a373] @endif"
@@ -576,10 +578,10 @@
                         <!-- Sağ Sütun: Eklenen ürünler ve butonlar -->
                         <div class="w-80 flex flex-col bg-gray-50 p-4">
                             <div class="font-semibold text-[#d4a373] mb-2">Eklenen Ürünler</div>
-                            <div id="createOrderProductList" class="flex-1 mb-4 max-h-96 overflow-y-auto"></div>
-                            <div class="flex flex-col gap-2 mt-auto">
-                                <button type="submit" id="createOrderSubmitBtn" class="px-4 py-2 bg-[#d4a373] border border-transparent rounded-md text-sm font-medium text-white hover:bg-[#b58863] disabled:opacity-50 disabled:cursor-not-allowed" disabled>Siparişi Oluştur</button>
-                                <button type="button" onclick="closeCreateOrderModal()" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">İptal</button>
+                            <div id="createOrderProductList" class="flex-1 mb-4 overflow-y-auto" style="max-height: calc(100vh - 500px);"></div>
+                            <div class="mt-4 space-y-3">
+                                <button type="submit" id="createOrderSubmitBtn" class="w-full px-4 py-2.5 bg-[#d4a373] border border-transparent rounded-md text-sm font-medium text-white hover:bg-[#b58863] disabled:opacity-50 disabled:cursor-not-allowed" disabled>Siparişi Oluştur</button>
+                                <button type="button" onclick="closeCreateOrderModal()" class="w-full px-4 py-2.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">İptal</button>
                             </div>
                         </div>
                     </div>
@@ -1040,6 +1042,56 @@
                 closeCreateOrderModal();
             });
         });
+
+        function clearTable(tableId) {
+            Swal.fire({
+                title: 'Masayı Boşaltma',
+                text: 'Masayı boşaltmak istediğinize emin misiniz?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#d4a373',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet, Boşalt',
+                cancelButtonText: 'İptal',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    return fetch(`/waiter/table/${tableId}/clear`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json;charset=UTF-8'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            throw new Error(data.message);
+                        }
+                        return data;
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(
+                            error.message || 'Bir hata oluştu. Lütfen tekrar deneyin.'
+                        );
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: result.value.title,
+                        text: result.value.message,
+                        icon: result.value.icon,
+                        confirmButtonColor: '#d4a373'
+                    }).then(() => {
+                        if (result.value.success) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            });
+        }
     </script>
 </body>
 </html>

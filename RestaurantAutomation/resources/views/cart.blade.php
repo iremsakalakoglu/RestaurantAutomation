@@ -190,20 +190,14 @@
 <!-- Navbar -->
 <nav class="bg-[#f5e6d3] p-4 shadow-md">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <a href="{{ url('/') }}" class="text-2xl font-bold flex items-center gap-1 hover:text-[#d4a373] transition-colors">
-            Central<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>Perk
-            <span class="text-gray-600 text-lg">cafe</span>
-        </a>
-        <div class="flex items-center gap-4">
-            <a href="{{ route('menu') }}" class="text-[#d4a373] hover:text-[#c48c63] transition-colors">
-                <i class="fas fa-utensils mr-2"></i>Menü
+        <div class="text-2xl font-bold flex items-center gap-1">
+            <a href="{{ route('menu') }}" class="flex items-center gap-1">
+                Central<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>Perk <span class="text-gray-600 text-lg">cafe</span>
             </a>
-            @auth
-            <a href="{{ route('account.info') }}" class="text-[#d4a373] hover:text-[#c48c63] transition-colors">
-                <i class="fas fa-user mr-2"></i>Hesabım
-            </a>
-            @endauth
         </div>
+        <a href="javascript:void(0)" onclick="returnToMenu()" class="text-[#d4a373] hover:text-[#c48c63] transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i>Menüye Dön
+        </a>
     </div>
 </nav>
 

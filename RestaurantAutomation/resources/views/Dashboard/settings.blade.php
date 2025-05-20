@@ -9,6 +9,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 <body class="bg-gray-100">
     <!-- Navbar -->
@@ -34,54 +37,61 @@
     <div class="fixed left-0 top-16 h-full w-64 bg-white shadow-md">
         <div class="p-4">
             <ul class="space-y-2">
-                <li>
-                    <a href="{{ route('dashboard') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+            <li>
+                    <a href="{{ route('dashboard') }}" class="flex items-center p-2 text-gray-700 {{ request()->routeIs('dashboard*') ? 'bg-gray-100' : '' }} rounded">
                         <i class="fas fa-chart-line w-6"></i>
                         <span>Genel Bakış</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.products') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.products') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.products*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-utensils w-6"></i>
                         <span>Ürünler</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.categories') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.categories') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.categories*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-list w-6"></i>
                         <span>Kategoriler</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.orders') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.orders') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.orders*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-shopping-cart w-6"></i>
                         <span>Siparişler</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.tables') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.tables') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.tables*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-chair w-6"></i>
                         <span>Masalar</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.users') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.users') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.users*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-users w-6"></i>
                         <span>Kullanıcılar</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.inventory') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.inventory') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.inventory*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-box w-6"></i>
                         <span>Stok Yönetimi</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.settings') }}" class="flex items-center p-2 text-gray-700 bg-gray-100 rounded">
+                    <a href="{{ route('admin.support-messages') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.support-messages*') ? 'bg-gray-100' : '' }}">
+                        <i class="fas fa-envelope w-6"></i>
+                        <span>Destek Talepleri</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.settings') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.settings*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-cog w-6"></i>
                         <span>Ayarlar</span>
                     </a>
                 </li>
+
             </ul>
         </div>
     </div>
@@ -127,38 +137,34 @@
             <!-- Tema Ayarları (sola) -->
             <div class="bg-white rounded-lg shadow-md overflow-hidden order-1 md:order-1">
                 <div class="p-6">
-                    <h2 class="text-lg font-semibold mb-4">Tema Ayarları</h2>
-                    <form id="themeSettingsForm">
-                        <div class="space-y-4">
+                    <h2 class="text-lg font-semibold mb-4">Aylık Gelir-Gider Raporu</h2>
+                    <form id="incomeExpenseForm" class="flex flex-col h-full">
+                        <div class="space-y-4 flex-1">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Tema Rengi</label>
-                                <div class="grid grid-cols-5 gap-2">
-                                    <button type="button" class="w-8 h-8 rounded-full bg-[#d4a373] ring-2 ring-offset-2 ring-[#d4a373]"></button>
-                                    <button type="button" class="w-8 h-8 rounded-full bg-blue-600"></button>
-                                    <button type="button" class="w-8 h-8 rounded-full bg-green-600"></button>
-                                    <button type="button" class="w-8 h-8 rounded-full bg-purple-600"></button>
-                                    <button type="button" class="w-8 h-8 rounded-full bg-red-600"></button>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Font Boyutu</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md">
-                                    <option>Küçük</option>
-                                    <option selected>Normal</option>
-                                    <option>Büyük</option>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Ay</label>
+                                <select id="reportMonth" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                                    <option>Ocak</option>
+                                    <option>Şubat</option>
+                                    <option>Mart</option>
+                                    <option>Nisan</option>
+                                    <option>Mayıs</option>
+                                    <option>Haziran</option>
+                                    <option>Temmuz</option>
+                                    <option>Ağustos</option>
+                                    <option>Eylül</option>
+                                    <option>Ekim</option>
+                                    <option>Kasım</option>
+                                    <option>Aralık</option>
                                 </select>
                             </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-700">Koyu Tema</span>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer">
-                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#d4a373]"></div>
-                                </label>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Yıl</label>
+                                <input type="number" id="reportYear" class="w-full px-3 py-2 border border-gray-300 rounded-md" value="{{ date('Y') }}">
                             </div>
-                            <button type="button" onclick="saveThemeSettings()" class="w-full bg-[#d4a373] text-white px-4 py-2 rounded hover:bg-[#c48c63] transition-colors">
-                                Kaydet
-                            </button>
                         </div>
+                        <button type="button" onclick="getIncomeExpenseReport()" class="w-full bg-[#d4a373] text-white px-4 py-2 rounded hover:bg-[#c48c63] transition-colors mt-8">
+                            Raporu Göster
+                        </button>
                     </form>
                 </div>
             </div>
@@ -387,15 +393,67 @@
             });
         }
 
-        function saveThemeSettings() {
+        function getIncomeExpenseReport() {
+            const month = document.getElementById('reportMonth').value;
+            const year = document.getElementById('reportYear').value;
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            fetch('/admin/reports/income-expense', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ month, year })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let detailsTable = '';
+                    if (data.details && data.details.length > 0) {
+                        detailsTable = `
+                            <div style="max-height:350px;overflow-y:auto;">
+                                <table class='min-w-full text-xs mt-4'><thead><tr><th class='px-2 py-1'>Tarih</th><th class='px-2 py-1'>Tip</th><th class='px-2 py-1'>Miktar</th><th class='px-2 py-1'>Alış Fiyatı</th><th class='px-2 py-1'>Satış Fiyatı</th><th class='px-2 py-1'>Açıklama</th></tr></thead><tbody>`;
+                        data.details.forEach(item => {
+                            detailsTable += `<tr><td class='border px-2 py-1'>${item.created_at ? item.created_at.substring(0,10) : ''}</td><td class='border px-2 py-1'>${item.type}</td><td class='border px-2 py-1'>${item.quantity}</td><td class='border px-2 py-1'>${item.purchase_price ?? '-'}</td><td class='border px-2 py-1'>${item.sale_price ?? '-'}</td><td class='border px-2 py-1'>${item.description ?? ''}</td></tr>`;
+                        });
+                        detailsTable += '</tbody></table></div>';
+                    } else {
+                        detailsTable = '<div class="text-gray-500 mt-2">Bu ay için hareket yok.</div>';
+                    }
+                    Swal.fire({
+                        title: 'Aylık Gelir-Gider Raporu',
+                        html: `<div class='text-left mb-2'><b>Toplam Gelir:</b> ${data.income} ₺<br><b>Toplam Gider:</b> ${data.expense} ₺<br><b>Net Kar:</b> ${data.net} ₺</div>` + detailsTable,
+                        width: 700,
+                        showCloseButton: true,
+                        confirmButtonText: 'Kapat',
+                        customClass: {popup: 'p-4'}
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata',
+                        text: data.message || 'Bir hata oluştu'
+                    });
+                }
+            })
+            .catch(error => {
             Swal.fire({
-                title: 'Başarılı!',
-                text: 'Tema ayarları kaydedildi',
-                icon: 'success',
-                timer: 2000,
-                showConfirmButton: false
+                    icon: 'error',
+                    title: 'Hata',
+                    text: error.message || 'Bir hata oluştu'
+                });
             });
         }
+
+        $(document).ready(function() {
+            $('#reportMonth').select2({
+                dropdownAutoWidth: true,
+                width: '100%',
+                minimumResultsForSearch: -1 // arama kutusunu gizler
+            });
+        });
     </script>
 </body>
 </html> 

@@ -9,13 +9,47 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class UsersController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $employees = User::whereIn('role', ['admin', 'waiter', 'kitchen', 'cashier'])->paginate(5, ['*'], 'employees');
-        $customers = User::where('role', 'customer')->paginate(5, ['*'], 'customers');
+        $query = User::whereIn('role', ['admin', 'waiter', 'kitchen', 'cashier']);
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                  ->orWhere('lastName', 'like', "%$search%")
+                  ->orWhere('email', 'like', "%$search%")
+                  ->orWhere('phone', 'like', "%$search%");
+            });
+        }
+        if ($request->filled('role')) {
+            $query->where('role', $request->role);
+        }
+        $employees = $query->paginate(5, ['*'], 'employees')->appends($request->all());
+        
+        // Müşteriler için de arama filtresi ekle
+        $customerQuery = User::where('role', 'customer');
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $customerQuery->where(function($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                  ->orWhere('lastName', 'like', "%$search%")
+                  ->orWhere('email', 'like', "%$search%")
+                  ->orWhere('phone', 'like', "%$search%");
+            });
+        }
+        // Eğer rol filtresi varsa ve 'customer' değilse, müşteri tablosu boş gelsin
+        if ($request->filled('role') && $request->role !== 'customer') {
+            $customers = new LengthAwarePaginator([], 0, 5, $request->input('customers', 1), [
+                'path' => LengthAwarePaginator::resolveCurrentPath(),
+                'pageName' => 'customers',
+            ]);
+        } else {
+            $customers = $customerQuery->paginate(5, ['*'], 'customers')->appends($request->all());
+        }
         return view('Dashboard.users', compact('employees', 'customers'));
     }
 

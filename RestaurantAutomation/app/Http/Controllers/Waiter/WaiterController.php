@@ -147,11 +147,38 @@ class WaiterController extends Controller
     {
         $table = Table::where('waiter_id', Auth::id())->findOrFail($id);
         
-        // Masayı boş olarak işaretle
+        // Masanın aktif siparişini kontrol et
+        $activeOrder = $table->orders()
+            ->where('status', 'teslim edildi')
+            ->latest()
+            ->first();
+
+        if ($activeOrder) {
+            // Tüm ürünlerin ödenip ödenmediğini kontrol et
+            $unpaidItems = $activeOrder->orderDetails()
+                ->where('is_paid', false)
+                ->exists();
+
+            if ($unpaidItems) {
+                return response()->json([
+                    'success' => false,
+                    'title' => 'Masa Boşaltılamıyor',
+                    'message' => 'Masada ödenmemiş ürünler bulunuyor.',
+                    'icon' => 'warning'
+                ], 200, ['Content-Type' => 'application/json;charset=UTF-8']);
+            }
+        }
+
+        // Masayı boşalt
         $table->status = 'boş';
         $table->save();
 
-        return redirect()->back()->with('success', 'Masa boşaltıldı');
+        return response()->json([
+            'success' => true,
+            'title' => 'Başarılı!',
+            'message' => 'Masa başarıyla boşaltıldı.',
+            'icon' => 'success'
+        ], 200, ['Content-Type' => 'application/json;charset=UTF-8']);
     }
 
     public function cancelOrderDetail(Request $request, $id)

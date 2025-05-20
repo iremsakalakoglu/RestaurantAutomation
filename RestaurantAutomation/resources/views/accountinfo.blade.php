@@ -14,7 +14,9 @@
     <nav class="bg-[#f5e6d3] p-4 shadow-md fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="text-2xl font-bold flex items-center gap-1">
-                Central<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>Perk <span class="text-gray-600 text-lg">cafe</span>
+                <a href="{{ route('menu') }}" class="flex items-center gap-1">
+                    Central<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>Perk <span class="text-gray-600 text-lg">cafe</span>
+                </a>
             </div>
             <!-- Hamburger menu button (mobile only) -->
             <button id="mobile-menu-btn" class="md:hidden text-2xl focus:outline-none">
@@ -22,7 +24,7 @@
             </button>
             <!-- Menü ve kullanıcı (masaüstü) -->
             <div class="hidden md:flex items-center gap-4">
-                <span class="text-gray-600">Menü</span>
+                <a href="{{ route('menu') }}" class="text-gray-600 hover:text-[#d4a373] transition-colors">Menü</a>
                 <span class="text-gray-600">Merhaba, <span class="font-medium text-[#d4a373]">{{ Auth::user()->name ?? 'Kullanıcı' }}</span></span>
             </div>
         </div>
@@ -35,7 +37,7 @@
             <a href="{{ route('order.history') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Geçmiş Siparişlerim</a>
             <a href="{{ route('favorites') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Favorilerim</a>
             <a href="{{ route('notifications') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Bildirimlerim</a>
-            <a href="#" class="block py-2 text-gray-700 hover:text-[#d4a373]">Destek/Yardım</a>
+            <a href="{{route('support')}}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Destek/Yardım</a>
             <div class="border-t border-[#e5d5c0] my-2"></div>
             <form action="{{ route('auth.logout') }}" method="POST" class="m-0">
                 @csrf
@@ -59,7 +61,7 @@
             <a href="{{ route('notifications') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#f8f4f0] text-gray-700">
                 <i class="fa-solid fa-bell"></i> Bildirimlerim
             </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#f8f4f0] text-gray-700">
+            <a href="{{route('support')}}" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#f8f4f0] text-gray-700">
                 <i class="fa-solid fa-circle-question"></i> Destek/Yardım
             </a>
         </nav>
@@ -93,7 +95,7 @@
                             <select class="w-20 px-2 py-2 border border-gray-300 rounded-lg bg-gray-50" disabled>
                                 <option selected>+90</option>
                             </select>
-                            <input type="text" id="phone" name="phone" value="{{ Auth::user()->phone ?? '' }}" class="w-44 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#d4a373] focus:border-[#d4a373] transition" maxlength="14" placeholder="5xx xxx xx xx">
+                            <input type="text" id="phone" name="phone" value="{{ Auth::user()->phone ?? '' }}" class="w-44 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#d4a373] focus:border-[#d4a373] transition" maxlength="15" placeholder="5xx xxx xx xx">
                         </div>
                     </div>
                     <button id="main-update-btn" type="submit" class="w-full bg-gray-300 text-white px-4 py-2 rounded-lg font-semibold cursor-not-allowed" disabled>Güncelle</button>

@@ -20,7 +20,7 @@
             </button>
             <!-- Menü ve kullanıcı (masaüstü) -->
             <div class="hidden md:flex items-center gap-4">
-                <span class="text-gray-600">Menü</span>
+                <a href="{{ route('menu') }}" class="text-gray-600 hover:text-[#d4a373] transition-colors">Menü</a>
                 <span class="text-gray-600">Merhaba, <span class="font-medium text-[#d4a373]">{{ Auth::user()->name ?? 'Kullanıcı' }}</span></span>
             </div>
         </div>
@@ -33,7 +33,7 @@
             <a href="{{ route('order.history') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Geçmiş Siparişlerim</a>
             <a href="{{ route('favorites')}}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Favorilerim</a>
             <a href="{{ route('notifications')}}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Bildirimlerim</a>
-            <a href="#" class="block py-2 text-gray-700 hover:text-[#d4a373]">Destek/Yardım</a>
+            <a href="{{route('support')}}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Destek/Yardım</a>
             <div class="border-t border-[#e5d5c0] my-2"></div>
             <form action="{{ route('auth.logout') }}" method="POST" class="m-0">
                 @csrf
@@ -51,13 +51,13 @@
             <a href="{{ route('order.history') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg font-semibold bg-white text-[#d4a373] shadow-sm">
                 <i class="fa-solid fa-clock-rotate-left"></i> Geçmiş Siparişlerim
             </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#f8f4f0] text-gray-700">
+            <a href="{{ route('favorites')}}" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#f8f4f0] text-gray-700">
                 <i class="fa-solid fa-heart"></i> Favorilerim
             </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#f8f4f0] text-gray-700">
+            <a href="{{ route('notifications')}}" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#f8f4f0] text-gray-700">
                 <i class="fa-solid fa-bell"></i> Bildirimlerim
             </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#f8f4f0] text-gray-700">
+            <a href="{{route('support')}}" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#f8f4f0] text-gray-700">
                 <i class="fa-solid fa-circle-question"></i> Destek/Yardım
             </a>
         </nav>

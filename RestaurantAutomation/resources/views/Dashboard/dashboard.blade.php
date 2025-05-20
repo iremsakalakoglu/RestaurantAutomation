@@ -37,49 +37,55 @@
         <div class="p-4">
             <ul class="space-y-2">
                 <li>
-                    <a href="{{ route('dashboard') }}" class="flex items-center p-2 text-gray-700 bg-gray-100 rounded">
+                    <a href="{{ route('dashboard') }}" class="flex items-center p-2 text-gray-700 {{ request()->routeIs('dashboard*') ? 'bg-gray-100' : '' }} rounded">
                         <i class="fas fa-chart-line w-6"></i>
                         <span>Genel Bakış</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.products') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.products') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.products*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-utensils w-6"></i>
                         <span>Ürünler</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.categories') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.categories') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.categories*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-list w-6"></i>
                         <span>Kategoriler</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.orders') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.orders') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.orders*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-shopping-cart w-6"></i>
                         <span>Siparişler</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.tables') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.tables') ? 'bg-gray-100' : '' }}">
+                    <a href="{{ route('admin.tables') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.tables*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-chair w-6"></i>
                         <span>Masalar</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.users') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.users') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.users*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-users w-6"></i>
                         <span>Kullanıcılar</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.inventory') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.inventory') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.inventory*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-box w-6"></i>
                         <span>Stok Yönetimi</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.settings') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.support-messages') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.support-messages*') ? 'bg-gray-100' : '' }}">
+                        <i class="fas fa-envelope w-6"></i>
+                        <span>Destek Talepleri</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.settings') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.settings*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-cog w-6"></i>
                         <span>Ayarlar</span>
                     </a>
@@ -219,7 +225,7 @@
                 type: ['gradient', 'solid'],
                 opacity: [0.1, 1],
             },
-            colors: ['#d4a373', '#4f46e5'],
+            colors: ['#a5b4fc', '#6ee7b7'],
             title: {
                 text: undefined
             },
@@ -235,7 +241,7 @@
                 title: {
                     text: 'Ciro (₺)',
                     style: {
-                        color: '#d4a373'
+                        color: '#4f46e5'
                     }
                 },
                 labels: {
@@ -251,7 +257,7 @@
                 title: {
                     text: 'Sipariş Sayısı',
                     style: {
-                        color: '#4f46e5'
+                        color: '#10b981'
                     }
                 },
                 labels: {
@@ -268,7 +274,7 @@
                 }
             },
             grid: {
-                borderColor: '#e2e8f0',
+                borderColor: '#f3f4f6',
                 strokeDashArray: 4
             },
             tooltip: {
@@ -314,7 +320,7 @@
             stroke: {
                 width: [0, 2]
             },
-            colors: ['#d4a373', '#10b981'],
+            colors: ['#a5b4fc', '#6ee7b7'],
             title: {
                 text: undefined
             },
@@ -327,7 +333,7 @@
                 },
                 style: {
                     fontSize: '14px',
-                    colors: ['#10b981', '#ef4444'],
+                    colors: ['#374151', '#6ee7b7'],
                     fontWeight: 600
                 },
                 offsetY: -8
@@ -351,7 +357,7 @@
                 title: {
                     text: 'Yeni Müşteri Sayısı',
                     style: {
-                        color: '#d4a373'
+                        color: '#4f46e5'
                     }
                 },
                 labels: {
@@ -390,7 +396,7 @@
                 opacity: [0.85, 1]
             },
             grid: {
-                borderColor: '#e2e8f0',
+                borderColor: '#f3f4f6',
                 strokeDashArray: 4,
                 xaxis: {
                     lines: {
@@ -459,7 +465,7 @@
                     speed: 500
                 }
             },
-            colors: ['#d4a373'],
+            colors: ['#c4b5fd'],
             plotOptions: {
                 bar: {
                     borderRadius: 4,
@@ -478,7 +484,7 @@
                 },
                 style: {
                     fontSize: '14px',
-                    colors: ['#ffffff'],
+                    colors: ['#374151'],
                     fontWeight: 600
                 },
                 offsetX: 30
@@ -508,7 +514,7 @@
                 }
             },
             grid: {
-                borderColor: '#e2e8f0',
+                borderColor: '#f3f4f6',
                 strokeDashArray: 4,
                 xaxis: {
                     lines: {
@@ -537,6 +543,11 @@
                     formatter: function (val) {
                         return val + ' adet satıldı';
                     }
+                }
+            },
+            legend: {
+                labels: {
+                    colors: '#64748b'
                 }
             },
             responsive: [{

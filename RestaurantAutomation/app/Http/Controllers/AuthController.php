@@ -140,10 +140,13 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors()->first()
-            ], 422);
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first()
+                ], 422);
+            }
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $user->name = $request->name;
@@ -152,10 +155,13 @@ class AuthController extends Controller
         $user->phone = preg_replace('/\D/', '', $request->phone);
         $user->save();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Bilgileriniz başarıyla güncellendi.'
-        ]);
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Bilgileriniz başarıyla güncellendi.'
+            ]);
+        }
+        return redirect()->back()->with('success', 'Bilgileriniz başarıyla güncellendi.');
     }
 
     /**
@@ -171,14 +177,14 @@ class AuthController extends Controller
         $user = Auth::user();
 
         // Mevcut şifreyi kontrol et
-        if (!Hash::check($request->current_password, $user->password)) {
-            return redirect()->route('account.info')->with('password_error', 'Mevcut şifreniz yanlış!');
+        if (!\Hash::check($request->current_password, $user->password)) {
+            return response()->json(['success' => false, 'message' => 'Mevcut şifreniz yanlış!']);
         }
 
         // Şifreyi güncelle
-        $user->password = Hash::make($request->new_password);
+        $user->password = \Hash::make($request->new_password);
         $user->save();
 
-        return redirect()->route('account.info')->with('password_success', 'Şifreniz başarıyla güncellendi!');
+        return response()->json(['success' => true, 'message' => 'Şifreniz başarıyla güncellendi!']);
     }
 }

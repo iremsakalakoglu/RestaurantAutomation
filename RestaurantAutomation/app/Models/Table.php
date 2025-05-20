@@ -21,6 +21,18 @@ class Table extends Model
         'capacity' => 'integer'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($table) {
+            // Sadece masa boşaltıldığında status_changed_at'i güncelle
+            if ($table->isDirty('status') && $table->status === 'boş') {
+                $table->status_changed_at = now();
+            }
+        });
+    }
+
     public function orders()
     {
         return $this->hasMany(Order::class);

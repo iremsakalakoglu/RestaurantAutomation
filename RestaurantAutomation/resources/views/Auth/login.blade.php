@@ -165,7 +165,7 @@
             <label>
                 <input type="checkbox" name="remember"> Beni Hatırla
             </label>
-            <a href="#">Şifremi Unuttum</a>
+            <!-- <a href="#">Şifremi Unuttum</a> -->
         </div>
         <button type="submit" class="button">Giriş Yap</button>
     </form>

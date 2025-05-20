@@ -195,25 +195,97 @@
     <div class="max-w-7xl mx-auto">
         <!-- Desktop Navbar -->
         <div class="flex justify-between items-center">
-            <a href="{{ url('/') }}" class="text-2xl font-bold flex items-center gap-1 hover:text-[#d4a373] transition-colors">
-                Central<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>Perk
-                <span class="text-gray-600 text-lg">cafe</span>
-            </a>
-            <div class="hidden md:flex items-center gap-6">
-                @auth
-                <a href="{{ route('account.info') }}" class="text-gray-600 hover:text-[#d4a373] transition-colors">
-                    <i class="fas fa-user mr-2"></i>Hesabım
+            <div class="text-2xl font-bold flex items-center gap-1">
+                <a href="{{ route('menu') }}" class="flex items-center gap-1">
+                    Central<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>Perk <span class="text-gray-600 text-lg">cafe</span>
                 </a>
+            </div>
+
+            <div class="flex items-center gap-4 md:hidden">
+                <!-- Mobil Sepet Butonu -->
+                <button class="text-gray-600 hover:text-[#d4a373] transition-colors relative" id="mobile-cart-button">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span class="cart-count absolute -top-2 -right-2 bg-[#d4a373] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                        {{ session('cart') ? count(session('cart')) : 0 }}
+                    </span>
+                </button>
+
+                <!-- Hamburger Menu Button -->
+                <button id="mobile-menu-button" class="text-gray-600 hover:text-[#d4a373] transition-colors">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+
+            <!-- Desktop Menu -->
+            <ul class="hidden md:flex items-center space-x-6">
+                <li><a href="{{ route('menu') }}" class="hover:text-[#d4a373] transition-colors">Menü</a></li>
+                @auth
+                <li class="relative group" id="user-menu-desktop">
+                    <button class="flex items-center gap-2 hover:text-[#d4a373] transition-colors focus:outline-none" id="user-menu-button">
+                        <span class="text-gray-800">Merhaba, <span class="font-medium text-[#d4a373]">{{ Auth::user()->name }}</span></span>
+                        <i class="fas fa-chevron-down text-xs ml-1"></i>
+                    </button>
+                    <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg z-50 py-2 border border-gray-100">
+                        <a href="{{ route('account.info') }}" class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-[#f8f4f0] transition-colors">
+                            <i class="fa-solid fa-user"></i> Hesap Bilgilerim
+                        </a>
+                        <a href="{{ route('order.page') }}" class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-[#f8f4f0] transition-colors">
+                            <i class="fa-solid fa-clock-rotate-left"></i> Geçmiş Siparişlerim
+                        </a>
+                        <a href="{{ route('favorites') }}" class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-[#f8f4f0] transition-colors">
+                            <i class="fa-solid fa-heart"></i> Favorilerim
+                        </a>
+                        <a href="{{ route('notifications') }}" class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-[#f8f4f0] transition-colors">
+                            <i class="fa-solid fa-bell"></i> Bildirimlerim
+                        </a>
+                        <a href="{{route('support')}}" class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-[#f8f4f0] transition-colors">
+                            <i class="fa-solid fa-circle-question"></i> Destek / Yardım
+                        </a>
+                        <form action="{{ route('auth.logout') }}" method="POST" class="m-0">
+                            @csrf
+                            <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-red-500 hover:bg-red-50 transition-colors">
+                                <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+                            </button>
+                        </form>
+                    </div>
+                </li>
+                @else
+                <li><a href="{{ route('auth.login') }}" class="hover:text-[#d4a373] transition-colors">Giriş Yap</a></li>
                 @endauth
-                <div class="relative" id="cart-icon">
-                    <a href="{{ route('cart') }}" class="text-gray-600 hover:text-[#d4a373] transition-colors">
+                <li class="relative group">
+                    <button class="hover:text-[#d4a373] transition-colors relative" id="cart-button">
                         <i class="fas fa-shopping-cart"></i>
-                        <span id="cart-count" class="absolute -top-2 -right-2 bg-[#d4a373] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        <span class="cart-count absolute -top-2 -right-2 bg-[#d4a373] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                             {{ session('cart') ? count(session('cart')) : 0 }}
                         </span>
-                    </a>
-                </div>
-            </div>
+                    </button>
+                    
+                    <!-- Mini Sepet -->
+                    <div id="mini-cart" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg z-50">
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold mb-3">Sepetim</h3>
+                            <div id="mini-cart-items" class="max-h-60 overflow-y-auto">
+                                <!-- Sepet öğeleri buraya dinamik olarak eklenecek -->
+                            </div>
+                            <div class="border-t mt-3 pt-3">
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="font-semibold">Toplam:</span>
+                                    <span id="mini-cart-total" class="text-[#d4a373] font-bold">0.00₺</span>
+                                </div>
+                                <div class="flex justify-between gap-2">
+                                    <a href="{{ route('cart') }}{{ request()->query('table') ? '?table='.request()->query('table') : '' }}" 
+                                       class="bg-[#d4a373] text-white px-4 py-2 rounded hover:bg-[#c48c63] transition-colors text-center flex-1">
+                                        Sepete Git
+                                    </a>
+                                    <button onclick="clearCart()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
         </div>
 
         <!-- Mobile Menu -->
@@ -235,7 +307,7 @@
                         <a href="{{ route('notifications') }}" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-[#f8f4f0] transition-colors text-gray-700">
                             <i class="fa-solid fa-bell"></i> Bildirimlerim
                         </a>
-                        <a href="#" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-[#f8f4f0] transition-colors text-gray-700">
+                        <a href="{{route('support')}}" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-[#f8f4f0] transition-colors text-gray-700">
                             <i class="fa-solid fa-circle-question"></i> Destek / Yardım
                         </a>
                         <form action="{{ route('auth.logout') }}" method="POST">

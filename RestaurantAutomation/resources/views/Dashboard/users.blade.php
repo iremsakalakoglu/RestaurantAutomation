@@ -34,50 +34,57 @@
     <div class="fixed left-0 top-16 h-full w-64 bg-white shadow-md">
         <div class="p-4">
             <ul class="space-y-2">
-                <li>
-                    <a href="{{ route('dashboard') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                
+            <li>
+                    <a href="{{ route('dashboard') }}" class="flex items-center p-2 text-gray-700 {{ request()->routeIs('dashboard*') ? 'bg-gray-100' : '' }} rounded">
                         <i class="fas fa-chart-line w-6"></i>
                         <span>Genel Bakış</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.products') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.products') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.products*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-utensils w-6"></i>
                         <span>Ürünler</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.categories') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.categories') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.categories*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-list w-6"></i>
                         <span>Kategoriler</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.orders') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.orders') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.orders*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-shopping-cart w-6"></i>
                         <span>Siparişler</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.tables') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.tables') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.tables*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-chair w-6"></i>
                         <span>Masalar</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.users') }}" class="flex items-center p-2 text-gray-700 bg-gray-100 rounded">
+                    <a href="{{ route('admin.users') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.users*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-users w-6"></i>
                         <span>Kullanıcılar</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.inventory') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.inventory') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.inventory*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-box w-6"></i>
                         <span>Stok Yönetimi</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.settings') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.support-messages') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.support-messages*') ? 'bg-gray-100' : '' }}">
+                        <i class="fas fa-envelope w-6"></i>
+                        <span>Destek Talepleri</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.settings') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.settings*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-cog w-6"></i>
                         <span>Ayarlar</span>
                     </a>
@@ -94,26 +101,30 @@
                 <p class="text-gray-600">Çalışanları ve müşterileri yönetin</p>
                 
                 <!-- Arama Kutusu -->
-                <div class="mt-4 flex items-center gap-4">
+                <form method="GET" action="" class="mt-4 flex items-center gap-4">
                     <div class="w-3/4">
                         <div class="relative">
-                            <input type="text" id="searchInput" 
-                                   placeholder="Ad, soyad, e-posta veya telefon ile arayın..." 
-                                   class="form-input pl-12 w-full">
-                            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Ad, soyad, e-posta veya telefon ile arayın..." class="form-input pl-12 w-full h-12 text-base" style="padding-left:3rem;">
+                            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400"></i>
                         </div>
                     </div>
                     <div class="w-1/4">
-                        <select id="filterRole" class="form-select w-full">
+                        <select name="role" class="form-select w-full">
                             <option value="">Tüm Roller</option>
-                            <option value="admin">Admin</option>
-                            <option value="waiter">Garson</option>
-                            <option value="kitchen">Mutfak</option>
-                            <option value="cashier">Kasiyer</option>
-                            <option value="customer">Müşteri</option>
+                            <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="waiter" {{ request('role') == 'waiter' ? 'selected' : '' }}>Garson</option>
+                            <option value="kitchen" {{ request('role') == 'kitchen' ? 'selected' : '' }}>Mutfak</option>
+                            <option value="cashier" {{ request('role') == 'cashier' ? 'selected' : '' }}>Kasiyer</option>
+                            <option value="customer" {{ request('role') == 'customer' ? 'selected' : '' }}>Müşteri</option>
                         </select>
                     </div>
-                </div>
+                    <button type="submit" class="bg-[#b88b5a] text-white px-6 py-3 rounded-lg hover:bg-[#c48c63] transition-all flex items-center gap-2">
+                        <i class="fas fa-filter"></i> Filtrele
+                    </button>
+                    <button type="button" onclick="window.location='{{ url()->current() }}'" class="ml-2 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-all flex items-center gap-2">
+                        <i class="fas fa-times"></i> Temizle
+                    </button>
+                </form>
             </div>
 
             <!-- Çalışanlar Tablosu -->
@@ -150,7 +161,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            @foreach($employees as $employee)
+                            @forelse($employees as $employee)
                             <tr class="transition-all">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center">
@@ -190,14 +201,18 @@
                                     </button>
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-6 text-gray-400">Kayıt bulunamadı.</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
                 <!-- Çalışanlar Sayfalama -->
                 <div class="mt-6">
                     <div class="flex justify-end bg-white/40 backdrop-blur-sm p-4 rounded-lg">
-                        {{ $employees->links('pagination::simple-tailwind') }}
+                        {{ $employees->appends(request()->all())->links('pagination::simple-tailwind') }}
                     </div>
                 </div>
             </div>
@@ -233,7 +248,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            @foreach($customers as $customer)
+                            @forelse($customers as $customer)
                             <tr class="transition-all">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center">
@@ -254,6 +269,9 @@
                                     <div class="text-sm text-gray-900">{{ $customer->phone }}</div>
                                 </td>
                                 <td class="px-6 py-4 text-right">
+                                    <button onclick="openPromoteModal({{ $customer->id }})" class="text-green-600 hover:text-green-800 transition-all p-2 hover:bg-green-50 rounded-lg mr-2">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
                                     <button onclick="editUser({{ $customer->id }})" 
                                             class="text-blue-600 hover:text-blue-900 transition-all p-2 hover:bg-blue-50 rounded-lg">
                                         <i class="fas fa-edit"></i>
@@ -264,14 +282,18 @@
                                     </button>
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-center py-6 text-gray-400">Kayıt bulunamadı.</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
                 <!-- Müşteriler Sayfalama -->
                 <div class="mt-6">
                     <div class="flex justify-end bg-white/40 backdrop-blur-sm p-4 rounded-lg">
-                        {{ $customers->links('pagination::simple-tailwind') }}
+                        {{ $customers->appends(request()->all())->links('pagination::simple-tailwind') }}
                     </div>
                 </div>
             </div>
@@ -363,6 +385,48 @@
                                 class="px-6 py-3 bg-[#d4a373] text-white rounded-lg hover:bg-[#c48c63] transition-all btn-hover flex items-center gap-2">
                             <i class="fas fa-save"></i>
                             <span>Kaydet</span>
+                            <div class="loading-spinner hidden"></div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Çalışan yap modalı -->
+    <div id="promoteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden overflow-y-auto h-full w-full modal-transition z-50">
+        <div class="relative top-32 mx-auto p-8 border w-[400px] shadow-xl rounded-xl bg-white">
+            <div class="absolute top-4 right-4">
+                <button onclick="closePromoteModal()" class="text-gray-400 hover:text-gray-600 transition-all">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-6">Çalışan Rolü Ata</h3>
+                <form id="promoteForm" class="space-y-6">
+                    <input type="hidden" id="promoteUserId">
+                    <div class="form-group">
+                        <label class="form-label" for="promoteRole">
+                            Rol Seçiniz
+                        </label>
+                        <select id="promoteRole" name="role" class="form-select" required>
+                            <option value="" disabled selected>Rol seçiniz</option>
+                            <option value="admin">Admin</option>
+                            <option value="waiter">Garson</option>
+                            <option value="kitchen">Mutfak</option>
+                            <option value="cashier">Kasiyer</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end gap-3 mt-8">
+                        <button type="button" onclick="closePromoteModal()" 
+                                class="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all btn-hover flex items-center gap-2">
+                            <i class="fas fa-times"></i>
+                            İptal
+                        </button>
+                        <button type="submit" id="promoteSubmitButton"
+                                class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all btn-hover flex items-center gap-2">
+                            <i class="fas fa-check"></i>
+                            <span>Onayla</span>
                             <div class="loading-spinner hidden"></div>
                         </button>
                     </div>
@@ -601,33 +665,56 @@
             });
         }
 
-        function deleteUser(id) {
-            if (confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz?')) {
-                fetch(`/admin/users/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showToast('Kullanıcı başarıyla silindi', 'success');
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1000);
-                    } else {
-                        throw new Error(data.message || 'Kullanıcı silinirken bir hata oluştu');
-                    }
-                })
-                .catch(error => {
-                    console.error('Hata:', error);
-                    showToast(error.message || 'Kullanıcı silinirken bir hata oluştu', 'error');
-                });
-            }
+        function deleteUser(userId) {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu kullanıcıyı silmek istediğinizden emin misiniz?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d4a373',
+                cancelButtonColor: '#ef4444',
+                confirmButtonText: 'Evet, sil',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/admin/users/${userId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Başarılı!',
+                                text: 'Kullanıcı başarıyla silindi.',
+                                icon: 'success',
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(() => {
+                                // Sayfayı yenile
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Hata!',
+                                text: data.message || 'Kullanıcı silinirken bir hata oluştu.',
+                                icon: 'error'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: 'Hata!',
+                            text: 'Kullanıcı silinirken bir hata oluştu.',
+                            icon: 'error'
+                        });
+                    });
+                }
+            });
         }
 
         function updateRole(id, role) {
@@ -687,39 +774,6 @@
             };
             const mask = IMask(phoneInput, maskOptions);
         });
-
-        // Arama ve filtreleme fonksiyonu
-        function filterUsers() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const selectedRole = document.getElementById('filterRole').value.toLowerCase();
-            const rows = document.querySelectorAll('tbody tr');
-
-            rows.forEach(row => {
-                const name = row.querySelector('td:first-child').textContent.toLowerCase();
-                const email = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                const phone = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-                let role = '';
-                
-                // Rol seçici varsa (çalışan) rolü al, yoksa müşteri olarak kabul et
-                const roleSelect = row.querySelector('select');
-                if (roleSelect) {
-                    role = roleSelect.value.toLowerCase();
-                } else {
-                    role = 'customer';
-                }
-
-                const matchesSearch = name.includes(searchTerm) || 
-                                    email.includes(searchTerm) || 
-                                    phone.includes(searchTerm);
-                const matchesRole = !selectedRole || role === selectedRole;
-
-                row.style.display = matchesSearch && matchesRole ? '' : 'none';
-            });
-        }
-
-        // Arama ve filtreleme event listener'ları
-        document.getElementById('searchInput').addEventListener('input', filterUsers);
-        document.getElementById('filterRole').addEventListener('change', filterUsers);
 
         // Form validasyonu güncelleme
         document.getElementById('userForm').addEventListener('submit', async function(e) {
@@ -794,6 +848,57 @@
                 // Her durumda loading durumunu sıfırla
                 submitButton.disabled = false;
                 submitText.textContent = 'Kaydet';
+                loadingSpinner.classList.add('hidden');
+            }
+        });
+
+        function openPromoteModal(userId) {
+            document.getElementById('promoteUserId').value = userId;
+            document.getElementById('promoteRole').value = '';
+            document.getElementById('promoteModal').classList.remove('hidden');
+        }
+
+        function closePromoteModal() {
+            document.getElementById('promoteModal').classList.add('hidden');
+        }
+
+        document.getElementById('promoteForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const userId = document.getElementById('promoteUserId').value;
+            const role = document.getElementById('promoteRole').value;
+            const submitButton = document.getElementById('promoteSubmitButton');
+            const submitText = submitButton.querySelector('span');
+            const loadingSpinner = submitButton.querySelector('.loading-spinner');
+            if (!role) return;
+            try {
+                submitButton.disabled = true;
+                submitText.textContent = 'Kaydediliyor...';
+                loadingSpinner.classList.remove('hidden');
+                const response = await fetch(`/admin/users/${userId}/role`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        role: role,
+                        _method: 'PUT'
+                    })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    showToast('Rol başarıyla atandı', 'success');
+                    setTimeout(() => { location.reload(); }, 1000);
+                } else {
+                    throw new Error(data.message || 'Rol atanırken bir hata oluştu');
+                }
+            } catch (error) {
+                showToast(error.message || 'Rol atanırken bir hata oluştu', 'error');
+            } finally {
+                submitButton.disabled = false;
+                submitText.textContent = 'Onayla';
                 loadingSpinner.classList.add('hidden');
             }
         });

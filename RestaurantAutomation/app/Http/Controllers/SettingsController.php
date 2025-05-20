@@ -7,6 +7,19 @@ use App\Models\Setting;
 
 class SettingsController extends Controller
 {
+    public function __construct()
+    {
+        $settings = Setting::first();
+        if (!$settings) {
+            Setting::create([
+                'name' => 'Central Perk Cafe',
+                'address' => 'Merkez Mah. Kahve Sok. No:1 İstanbul',
+                'phone' => '0212 555 55 55',
+                'email' => 'info@centralperk.com'
+            ]);
+        }
+    }
+
     public function saveGeneral(\Illuminate\Http\Request $request)
     {
         $validated = $request->validate([

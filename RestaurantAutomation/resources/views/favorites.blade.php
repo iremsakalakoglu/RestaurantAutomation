@@ -11,9 +11,11 @@
     <!-- Navbar -->
     <nav class="bg-[#f5e6d3] p-4 shadow-md fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="{{ url('/') }}" class="text-2xl font-bold flex items-center gap-1 hover:text-[#d4a373] transition-colors">
-                Central<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>Perk <span class="text-gray-600 text-lg">cafe</span>
-            </a>
+            <div class="text-2xl font-bold flex items-center gap-1">
+                <a href="{{ route('menu') }}" class="flex items-center gap-1">
+                    Central<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>Perk <span class="text-gray-600 text-lg">cafe</span>
+                </a>
+            </div>
             <button id="mobile-menu-btn" class="md:hidden text-2xl focus:outline-none">
                 <i class="fa-solid fa-bars"></i>
             </button>
@@ -25,13 +27,12 @@
         <div id="mobile-menu" class="md:hidden hidden flex-col gap-2 bg-[#f5e6d3] px-4 py-4 rounded-b-lg shadow-lg">
             <span class="block py-2 text-lg font-semibold text-gray-700">Merhaba, <span class="font-medium text-[#d4a373]">{{ Auth::user()->name ?? 'Kullanıcı' }}</span></span>
             <div class="border-t border-[#e5d5c0] my-2"></div>
-            <a href="{{ url('/') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Ana Sayfa</a>
             <a href="{{ route('menu') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Menü</a>
             <a href="{{ route('account.info') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Hesap Bilgilerim</a>
             <a href="{{ route('order.history') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Geçmiş Siparişlerim</a>
             <a href="{{ route('favorites') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Favorilerim</a>
             <a href="{{ route('notifications') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Bildirimlerim</a>
-            <a href="#" class="block py-2 text-gray-700 hover:text-[#d4a373]">Destek/Yardım</a>
+            <a href="{{route('support')}}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Destek/Yardım</a>
             <div class="border-t border-[#e5d5c0] my-2"></div>
             <form action="{{ route('auth.logout') }}" method="POST" class="m-0">
                 @csrf
@@ -55,7 +56,7 @@
             <a href="{{ route('notifications') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#f8f4f0] text-gray-700">
                 <i class="fa-solid fa-bell"></i> Bildirimlerim
             </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#f8f4f0] text-gray-700">
+            <a href="{{route('support')}}" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#f8f4f0] text-gray-700">
                 <i class="fa-solid fa-circle-question"></i> Destek/Yardım
             </a>
         </nav>

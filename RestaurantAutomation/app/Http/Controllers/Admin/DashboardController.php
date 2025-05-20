@@ -12,6 +12,7 @@ use App\Models\Stock;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Models\OrderDetail;
 
 class DashboardController extends Controller
 {
@@ -30,9 +31,11 @@ class DashboardController extends Controller
             $date = Carbon::today()->subDays($i);
             
             // O günün cirosu
-            $dailyRevenue = Payment::whereDate('created_at', $date)
-                ->where('status', 'tamamlandi')
-                ->sum('amount');
+            $dailyRevenue = OrderDetail::whereHas('order', function($query) use ($date) {
+                $query->whereDate('updated_at', $date)
+                    ->where('payment_status', 'ödendi');
+            })->where('is_paid', true)
+            ->sum(DB::raw('price * quantity'));
             
             // O günün sipariş sayısı
             $orderCount = Order::whereDate('created_at', $date)->count();
@@ -114,7 +117,7 @@ class DashboardController extends Controller
         try {
             // Günlük satış toplamını hesapla
             $dailySales = Payment::whereDate('created_at', Carbon::today())
-                ->where('status', 'tamamlandi')
+                ->where('status', 'tamamlandı')
                 ->sum('amount');
 
             // Toplam sipariş sayısını hesapla

@@ -15,14 +15,17 @@ class OrderDetail extends Model
         'quantity',
         'price',
         'is_delivered',
-        'is_paid'
+        'is_paid',
+        'notes',
+        'is_canceled'
     ];
 
     protected $casts = [
         'quantity' => 'integer',
         'price' => 'decimal:2',
         'is_delivered' => 'boolean',
-        'is_paid' => 'boolean'
+        'is_paid' => 'boolean',
+        'is_canceled' => 'boolean'
     ];
 
     public function order()

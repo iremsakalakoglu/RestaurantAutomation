@@ -20,34 +20,38 @@ class KitchenController extends Controller
             return redirect()->route('menu')->with('error', 'Bu sayfaya erişim yetkiniz bulunmamaktadır.');
         }
 
-        // Aktif siparişleri getir (sipariş alındı ve hazırlanıyor durumundakiler)
-        $activeOrders = Order::whereIn('status', ['sipariş alındı', 'hazırlanıyor'])
+        // Bekleyen siparişleri getir (sipariş alındı durumundakiler)
+        $pendingOrders = Order::where('status', 'sipariş alındı')
             ->with(['table', 'orderDetails.product'])
-            ->orderByRaw("CASE 
-                WHEN status = 'hazırlanıyor' THEN 1 
-                WHEN status = 'sipariş alındı' THEN 2 
-                ELSE 3 END")
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
-        // Hazır siparişleri getir (son 24 saat içindeki)
-        $completedOrders = Order::where('status', 'hazır')
-            ->where('updated_at', '>=', now()->subHours(24))
+        // Hazırlanan siparişleri getir (hazırlanıyor durumundakiler)
+        $preparingOrders = Order::where('status', 'hazırlanıyor')
             ->with(['table', 'orderDetails.product'])
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        // Tamamlanmış siparişleri getir (hazır ve teslim edildi durumundakiler)
+        $today = Carbon::now('Europe/Istanbul')->startOfDay();
+        $completedOrders = Order::whereIn('status', ['hazır', 'teslim edildi'])
+            ->with(['table', 'orderDetails.product'])
+            ->where('updated_at', '>=', $today)
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        // Tüm siparişleri birleştir
-        $allOrders = $activeOrders->concat($completedOrders);
-
         // Bugün tamamlanan siparişleri say
-        $completedToday = Order::where('status', 'hazır')
-            ->whereDate('updated_at', Carbon::today())
-            ->count();
+        $completedToday = $completedOrders->count();
+
+        // Tüm siparişleri birleştir
+        $allOrders = $pendingOrders->concat($preparingOrders)->concat($completedOrders);
 
         return view('kitchen.kitchen', [
-            'activeOrders' => $allOrders,
-            'completedToday' => $completedToday
+            'pendingOrders' => $pendingOrders,
+            'preparingOrders' => $preparingOrders,
+            'completedOrders' => $completedOrders,
+            'completedToday' => $completedToday,
+            'activeOrders' => $allOrders
         ]);
     }
 
@@ -204,6 +208,45 @@ class KitchenController extends Controller
                 'error' => $e->getMessage()
             ]);
             
+            return response()->json([
+                'success' => false,
+                'message' => 'Bir hata oluştu: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Ürün iptal etme
+    public function cancelItem($orderId, $itemId)
+    {
+        try {
+            if (!\Auth::check() || \Auth::user()->role !== 'kitchen') {
+                throw new \Exception('Yetkisiz erişim');
+            }
+
+            $order = \App\Models\Order::findOrFail($orderId);
+            $orderDetail = $order->orderDetails()->where('id', $itemId)->first();
+            if (!$orderDetail) {
+                throw new \Exception('Sipariş detayı bulunamadı');
+            }
+
+            $orderDetail->is_canceled = true;
+            $orderDetail->save();
+
+            // Eğer siparişte hazır olmayan ve iptal edilmeyen ürün kalmadıysa siparişi hazır yap
+            $hazirOlmayanUrunVarMi = $order->orderDetails()
+                ->where('is_ready', false)
+                ->where('is_canceled', false)
+                ->exists();
+            if (!$hazirOlmayanUrunVarMi) {
+                $order->status = 'hazır';
+                $order->save();
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Ürün iptal edildi.'
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Bir hata oluştu: ' . $e->getMessage()

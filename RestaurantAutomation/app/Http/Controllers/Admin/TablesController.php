@@ -43,7 +43,7 @@ class TablesController extends Controller
             'success' => true, 
             'message' => 'Masa başarıyla eklendi',
             'table' => $table,
-            'qr_url' => url('/qrcode/' . $table->id)
+            'qr_url' => config('app.url') . '/qrcode/' . $table->id
         ]);
     }
 

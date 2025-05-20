@@ -17,6 +17,8 @@ use App\Http\Controllers\Kitchen\KitchenController;
 use App\Http\Controllers\Waiter\WaiterController;
 use App\Http\Controllers\Cashier\CashierController;
 use App\Http\Controllers\OrderHistoryController;
+use App\Http\Controllers\SupportController;
+use App\Http\Controllers\Admin\SupportMessageController;
 
 // Ana Sayfa
 Route::get('/', function () {
@@ -44,6 +46,7 @@ Route::prefix('kitchen')->group(function () {
     Route::get('/', [KitchenController::class, 'index'])->name('kitchen.dashboard');
     Route::post('/orders/{order}/status', [KitchenController::class, 'updateOrderStatus'])->name('kitchen.order.status');
     Route::post('/orders/{order}/items/{item}/status', [KitchenController::class, 'updateItemStatus'])->name('kitchen.item.status');
+    Route::post('/orders/{order}/items/{item}/cancel', [\App\Http\Controllers\Kitchen\KitchenController::class, 'cancelItem']);
 });
 
 // Waiter Routes
@@ -70,6 +73,8 @@ Route::prefix('cashier')->group(function () {
     Route::post('/order/{order}/status', [CashierController::class, 'updateOrderStatus'])->name('cashier.order.status');
     Route::get('/adisyon/{tableId}', [\App\Http\Controllers\Cashier\CashierController::class, 'adisyon'])->name('cashier.adisyon');
     Route::post('/pay-detail/{detailId}', [\App\Http\Controllers\Cashier\CashierController::class, 'payOrderDetail'])->name('cashier.pay-detail');
+    Route::post('/pay-all/{orderId}', [\App\Http\Controllers\Cashier\CashierController::class, 'payAll'])->name('cashier.pay-all');
+    Route::get('/get-summary', [\App\Http\Controllers\Cashier\CashierController::class, 'getSummary'])->name('cashier.get-summary');
 });
 
 // Admin Routes
@@ -144,6 +149,11 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     // Settings
     Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'showSettingsPage'])->name('admin.settings');
     Route::post('/settings/general', [\App\Http\Controllers\SettingsController::class, 'saveGeneral'])->name('admin.settings.general');
+
+    // Support Messages
+    Route::get('/support-messages', [SupportMessageController::class, 'index'])->name('admin.support-messages');
+    Route::get('/support-messages/{id}', [SupportMessageController::class, 'show'])->name('admin.support-messages.show');
+    Route::post('/support-messages/{id}/reply', [SupportMessageController::class, 'reply'])->name('admin.support-messages.reply');
 });
 
 // Auth Routes
@@ -181,4 +191,27 @@ Route::middleware(['auth'])->get('/favorites', [OrderHistoryController::class, '
 Route::middleware(['auth'])->get('/notifications', [OrderHistoryController::class, 'notifications'])->name('notifications');
 
 Route::middleware(['auth'])->post('/order/{id}/repeat', [App\Http\Controllers\OrderController::class, 'repeatOrder'])->name('order.repeat');
+
+// Aylık gelir-gider raporu için route (admin grubu DIŞINDA)
+Route::post('/admin/reports/income-expense', [App\Http\Controllers\Admin\ReportController::class, 'incomeExpense']);
+
+// Support Routes
+Route::middleware(['auth'])->get('/support', [SupportController::class, 'index'])->name('support');
+Route::post('/support/contact', [SupportController::class, 'contact'])->name('support.contact');
+
+
+// Account Info for Kitchen
+Route::middleware(['auth'])->get('/kitchen/account-info', function () {
+    return view('kitchen.accountinfo_kitchen');
+})->name('kitchen.account.info');
+
+// Account Info for Waiter
+Route::middleware(['auth'])->get('/waiter/account-info', function () {
+    return view('waiter.accountinfo_waiter');
+})->name('waiter.account.info');
+
+// Account Info for Cashier
+Route::middleware(['auth'])->get('/cashier/account-info', function () {
+    return view('cashier.accountinfo_cashier');
+})->name('cashier.account.info');
 

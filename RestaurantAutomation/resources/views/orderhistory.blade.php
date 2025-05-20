@@ -6,14 +6,18 @@
     <title>Central Perk - Sipariş Geçmişim</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
     <!-- Navbar -->
     <nav class="bg-[#f5e6d3] p-4 shadow-md fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="{{ url('/') }}" class="text-2xl font-bold flex items-center gap-1 hover:text-[#d4a373] transition-colors">
-                Central<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>Perk <span class="text-gray-600 text-lg">cafe</span>
-            </a>
+            <div class="text-2xl font-bold flex items-center gap-1">
+                <a href="{{ route('menu') }}" class="flex items-center gap-1">
+                    Central<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>Perk <span class="text-gray-600 text-lg">cafe</span>
+                </a>
+            </div>
             <!-- Hamburger menu button (mobile only) -->
             <button id="mobile-menu-btn" class="md:hidden text-2xl focus:outline-none">
                 <i class="fa-solid fa-bars"></i>
@@ -28,13 +32,12 @@
         <div id="mobile-menu" class="md:hidden hidden flex-col gap-2 bg-[#f5e6d3] px-4 py-4 rounded-b-lg shadow-lg">
             <span class="block py-2 text-lg font-semibold text-gray-700">Merhaba, <span class="font-medium text-[#d4a373]">{{ Auth::user()->name ?? 'Kullanıcı' }}</span></span>
             <div class="border-t border-[#e5d5c0] my-2"></div>
-            <a href="{{ url('/') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Ana Sayfa</a>
             <a href="{{ route('menu') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Menü</a>
             <a href="{{ route('account.info') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Hesap Bilgilerim</a>
             <a href="{{ route('order.history') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Geçmiş Siparişlerim</a>
             <a href="{{ route('favorites') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Favorilerim</a>
             <a href="{{ route('notifications') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Bildirimlerim</a>
-            <a href="#" class="block py-2 text-gray-700 hover:text-[#d4a373]">Destek/Yardım</a>
+            <a href="{{route('support')}}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Destek/Yardım</a>
             <div class="border-t border-[#e5d5c0] my-2"></div>
             <form action="{{ route('auth.logout') }}" method="POST" class="m-0">
                 @csrf
@@ -58,7 +61,7 @@
             <a href="{{ route('notifications') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#f8f4f0] text-gray-700">
                 <i class="fa-solid fa-bell"></i> Bildirimlerim
             </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#f8f4f0] text-gray-700">
+            <a href="{{route('support')}}" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#f8f4f0] text-gray-700">
                 <i class="fa-solid fa-circle-question"></i> Destek/Yardım
             </a>
         </nav>
@@ -68,6 +71,15 @@
     <main class="flex flex-col items-center justify-start pt-24 pb-8 px-4 min-h-[calc(100vh-4.5rem)] bg-gray-100 md:pl-64">
         <div class="w-full max-w-5xl">
             <h1 class="text-3xl font-bold text-[#b88b5a] mb-8">Sipariş Geçmişim</h1>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+            <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+            <script>
+            flatpickr("#date_range", {
+                mode: "range",
+                dateFormat: "Y-m-d",
+                locale: "tr"
+            });
+            </script>
             
             @if($orders->isEmpty())
                 <div class="bg-white rounded-lg shadow-md p-6 text-center">
@@ -128,7 +140,7 @@
                                 <div class="mt-4 flex justify-end gap-2">
                                     <form action="{{ route('order.repeat', $order->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#d4a373] hover:bg-[#b88b5a] rounded transition-colors">
+                                        <button type="button" class="repeat-order-btn inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#d4a373] hover:bg-[#b88b5a] rounded transition-colors">
                                             <i class="fa-solid fa-rotate-right"></i>
                                             Siparişi Tekrarla
                                         </button>
@@ -157,6 +169,42 @@
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
         }
+
+        // Siparişi Tekrarla butonuna SweetAlert onayı
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.repeat-order-btn').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    Swal.fire({
+                        title: 'Emin misiniz?',
+                        text: 'Bu siparişi tekrar vermek üzeresiniz.',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d4a373',
+                        cancelButtonColor: '#aaa',
+                        confirmButtonText: 'Evet, tekrar ver!',
+                        cancelButtonText: 'Vazgeç'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            btn.closest('form').submit();
+                        }
+                    });
+                });
+            });
+        });
     </script>
+
+    @if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Başarılı!',
+            text: @json(session('success')),
+            confirmButtonColor: '#d4a373',
+            customClass: {
+                popup: 'rounded-xl'
+            }
+        });
+    </script>
+    @endif
 </body>
 </html> 

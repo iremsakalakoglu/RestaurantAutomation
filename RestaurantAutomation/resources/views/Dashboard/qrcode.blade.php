@@ -35,49 +35,55 @@
         <div class="p-4">
             <ul class="space-y-2">
                 <li>
-                    <a href="{{ route('dashboard') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('dashboard') }}" class="flex items-center p-2 text-gray-700 {{ request()->routeIs('dashboard*') ? 'bg-gray-100' : '' }} rounded">
                         <i class="fas fa-chart-line w-6"></i>
                         <span>Genel Bakış</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.products') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.products') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.products*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-utensils w-6"></i>
                         <span>Ürünler</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.categories') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.categories') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.categories*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-list w-6"></i>
                         <span>Kategoriler</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.orders') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.orders') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.orders*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-shopping-cart w-6"></i>
                         <span>Siparişler</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.tables') }}" class="flex items-center p-2 text-gray-700 bg-gray-100 rounded">
+                    <a href="{{ route('admin.tables') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.tables*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-chair w-6"></i>
                         <span>Masalar</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.users') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.users') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.users*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-users w-6"></i>
                         <span>Kullanıcılar</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.inventory') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.inventory') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.inventory*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-box w-6"></i>
                         <span>Stok Yönetimi</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.settings') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <a href="{{ route('admin.support-messages') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.support-messages*') ? 'bg-gray-100' : '' }}">
+                        <i class="fas fa-envelope w-6"></i>
+                        <span>Destek Talepleri</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.settings') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.settings*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-cog w-6"></i>
                         <span>Ayarlar</span>
                     </a>
@@ -117,7 +123,7 @@
 
                 <div class="mt-8 text-sm text-gray-500">
                     <p>QR kodunu taratıldığında şu URL'ye yönlendirilecektir:</p>
-                    <code class="bg-gray-100 px-2 py-1 rounded">{{ url('/menu?table=' . $table->id) }}</code>
+                    <code class="bg-gray-100 px-2 py-1 rounded">{{ config('app.url') }}/menu?table={{ $table->id }}</code>
                 </div>
             </div>
         </div>
