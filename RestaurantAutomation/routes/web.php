@@ -82,6 +82,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
+    // Raporlama
+    Route::get('/reports', [App\Http\Controllers\Admin\ReportController::class, 'index'])->name('admin.reports');
+
     // Categories
     Route::get('/categories', [CategoryController::class, 'index'])->name('admin.categories');
     Route::post('/categories', [CategoryController::class, 'store'])->name('admin.categories.store');

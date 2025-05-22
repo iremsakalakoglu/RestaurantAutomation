@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Central Perk - Garson Paneli</title>
+    <title>{{ $settings->name ?? 'Restaurant' }} - Garson Paneli</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
@@ -28,7 +28,7 @@
     <nav class="bg-[#f5e6d3] p-4 shadow-md fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="text-2xl font-bold flex items-center gap-1">
-                Central<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>Perk
+            {{ $settings->name ?? 'Restaurant' }}<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>
                 <span class="text-gray-600 text-lg">Garson</span>
             </div>
             <div class="flex items-center gap-4">
@@ -219,7 +219,14 @@
                                                 </div>
                                             </div>
                                             <div class="ml-4">
-                                                @if($detail->is_delivered)
+                                                @if($detail->is_cancelled)
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                        </svg>
+                                                        İptal Edildi
+                                                    </span>
+                                                @elseif($detail->is_delivered)
                                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
                                                         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>

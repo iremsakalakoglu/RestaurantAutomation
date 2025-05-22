@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Central Perk - Hesap Bilgilerim</title>
+    <title>{{ $settings->name ?? 'Restaurant' }}  - Hesap Bilgilerim</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -13,7 +13,7 @@
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="text-2xl font-bold flex items-center gap-1">
                 <a href="{{ route('kitchen.dashboard') }}" class="flex items-center gap-1">
-                    Central<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>Perk <span class="text-gray-600 text-lg">Mutfak</span>
+                {{ $settings->name ?? 'Restaurant' }}<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup> <span class="text-gray-600 text-lg">Mutfak</span>
                 </a>
             </div>
             <!-- Hamburger menu button (mobile only) -->

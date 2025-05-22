@@ -230,6 +230,7 @@ class KitchenController extends Controller
             }
 
             $orderDetail->is_canceled = true;
+            $orderDetail->is_ready = false;
             $orderDetail->save();
 
             // Eğer siparişte hazır olmayan ve iptal edilmeyen ürün kalmadıysa siparişi hazır yap

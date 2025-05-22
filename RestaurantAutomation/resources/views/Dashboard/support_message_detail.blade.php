@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Destek Talebi Detay</title>
+    <title>{{ $settings->name ?? 'Restaurant' }} - Destek Talebi Detay</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -11,7 +11,7 @@
     <nav class="bg-[#f5e6d3] p-4 shadow-md fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="text-2xl font-bold flex items-center gap-1">
-                Central<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>Perk
+                {{ $settings->name ?? 'Restaurant' }}<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>
                 <span class="text-gray-600 text-lg">Admin</span>
             </div>
             <div class="flex items-center gap-4">
@@ -74,6 +74,12 @@
                     <a href="{{ route('admin.support-messages') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.support-messages*') ? 'bg-gray-100' : '' }}">
                         <i class="fas fa-envelope w-6"></i>
                         <span>Destek Talepleri</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.reports') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded {{ request()->routeIs('admin.reports*') ? 'bg-gray-100' : '' }}">
+                        <i class="fas fa-chart-bar w-6"></i>
+                        <span>Raporlama</span>
                     </a>
                 </li>
                 <li>

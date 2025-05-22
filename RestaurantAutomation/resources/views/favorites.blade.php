@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Central Perk - Favorilerim</title>
+    <title>{{ $settings->name ?? 'Restaurant' }}  - Favorilerim</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -12,22 +12,22 @@
     <nav class="bg-[#f5e6d3] p-4 shadow-md fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="text-2xl font-bold flex items-center gap-1">
-                <a href="{{ route('menu') }}" class="flex items-center gap-1">
-                    Central<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>Perk <span class="text-gray-600 text-lg">cafe</span>
+                <a href="{{ route('menu', ['table' => $sessionTableId]) }}" class="flex items-center gap-1">
+                    {{ $settings->name ?? 'Restaurant' }}<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup> <span class="text-gray-600 text-lg">cafe</span>
                 </a>
             </div>
             <button id="mobile-menu-btn" class="md:hidden text-2xl focus:outline-none">
                 <i class="fa-solid fa-bars"></i>
             </button>
             <div class="hidden md:flex items-center gap-4">
-                <a href="{{ route('menu') }}" class="text-gray-600 hover:text-[#d4a373] transition-colors">Menü</a>
+                <a href="{{ route('menu', ['table' => $sessionTableId]) }}" class="text-gray-600 hover:text-[#d4a373] transition-colors">Menü</a>
                 <span class="text-gray-600">Merhaba, <span class="font-medium text-[#d4a373]">{{ Auth::user()->name ?? 'Kullanıcı' }}</span></span>
             </div>
         </div>
         <div id="mobile-menu" class="md:hidden hidden flex-col gap-2 bg-[#f5e6d3] px-4 py-4 rounded-b-lg shadow-lg">
             <span class="block py-2 text-lg font-semibold text-gray-700">Merhaba, <span class="font-medium text-[#d4a373]">{{ Auth::user()->name ?? 'Kullanıcı' }}</span></span>
             <div class="border-t border-[#e5d5c0] my-2"></div>
-            <a href="{{ route('menu') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Menü</a>
+            <a href="{{ route('menu', ['table' => $sessionTableId]) }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Menü</a>
             <a href="{{ route('account.info') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Hesap Bilgilerim</a>
             <a href="{{ route('order.history') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Geçmiş Siparişlerim</a>
             <a href="{{ route('favorites') }}" class="block py-2 text-gray-700 hover:text-[#d4a373]">Favorilerim</a>

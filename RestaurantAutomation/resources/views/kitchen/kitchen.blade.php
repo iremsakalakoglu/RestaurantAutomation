@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Central Perk - Mutfak Paneli</title>
+    <title>{{ $settings->name ?? 'Restaurant' }}  - Mutfak Paneli</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
@@ -36,7 +36,7 @@
     <nav class="bg-[#f5e6d3] p-4 shadow-md fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="text-2xl font-bold flex items-center gap-1">
-                Central<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>Perk
+                {{ $settings->name ?? 'Restaurant' }}<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>
                 <span class="text-gray-600 text-lg">Mutfak</span>
             </div>
             <div class="flex items-center">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Central Perk - Giriş</title>
+    <title>{{ $settings->name ?? 'Restaurant' }} - Giriş</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
@@ -130,7 +130,7 @@
 
 <div class="container">
     <a href="{{ route('menu') }}" class="logo">
-        Central<sup><i class="fa-solid fa-mug-saucer"></i></sup>Perk
+    {{ $settings->name ?? 'Restaurant' }}<sup><i class="fa-solid fa-mug-saucer text-[#d4a373]"></i></sup>
         <span>cafe</span>
     </a>
 
